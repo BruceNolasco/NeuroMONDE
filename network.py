@@ -15,7 +15,8 @@ import random
 
 # Third-party libraries
 import numpy as np
-
+import MtoNCoupling as mn
+from scipy import special as sp
 class Network(object):
 
     def __init__(self, sizes):
@@ -34,6 +35,8 @@ class Network(object):
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
+	"""An array containing a tuple per gen of average dist, SD of dist"""
+	self.history = []
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
@@ -122,9 +125,32 @@ class Network(object):
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
         neuron in the final layer has the highest activation."""
-        test_results = [(np.argmax(self.feedforward(x)), y)
-                        for (x, y) in test_data]
-        return sum(int(x == y) for (x, y) in test_results)
+        #test_results = [(np.argmax(self.feedforward(x)), y)
+        #                for (x, y) in test_data]
+        #return sum(int(x == y) for (x, y) in test_results)
+        distances = []
+        dist = 0
+        success = 0
+        test_results = []
+        for (x,y) in test_data:
+            #print "x: "+str(x)
+            result = self.feedforward(x)
+            test_results.append((mn.binToCoordF(result,8),y))
+        for x in test_results:
+            dist = pow((x[0][0]-x[1][0])**2+(x[0][1]-x[1][1])**2,0.5)
+            distances.append(dist)
+            if dist<=2:
+                success+=1
+        #print distances
+        mean = np.mean(distances)
+        print "Average dist: "+str(mean)
+        std = np.std(distances)
+        print "SD : "+str(std)
+	maxd = max(distances)
+	mind = min(distances)
+        self.history.append((mean,std,mind,maxd))
+        return success
+
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
