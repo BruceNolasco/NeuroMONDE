@@ -17,15 +17,17 @@ means =[x[0] for x in net.history]
 stds = [float(x[1]) for x in net.history]
 
 base = [j for j in range(gens)]
-mini = [ x[0]-x[2] for x in net.history]
-maxi = [ x[3]-x[0] for x in net.history]
+mini = [ x[2] for x in net.history]
+maxi = [ x[3] for x in net.history]
 minimax = []
 minimax.append([mini])
 minimax.append([maxi])
 print minimax
 
 fig, ax = plt.subplots()
-ax.errorbar(base, means, yerr =[mini,maxi])
+ax.errorbar(base, means, yerr =stds)
+ax.plot(base,mini,color="red")
+ax.plot(base,maxi,color="green")
 plt.show()
 
 plt.show()
