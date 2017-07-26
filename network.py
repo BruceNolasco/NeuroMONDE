@@ -93,7 +93,7 @@ class Network(object):
                     j, self.evaluate(test_data), n_test)
             else:
                 print "Epoch {0} complete".format(j)
-            pickle.dump(net, open("nets/"+identifier+".nmnd","wb"))
+            pickle.dump(self, open("nets/"+identifier+".nmnd","wb"))
 
 
     def update_mini_batch(self, mini_batch, eta):
