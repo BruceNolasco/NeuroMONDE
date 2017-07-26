@@ -12,7 +12,7 @@ and omits many desirable features.
 #### Libraries
 # Standard library
 import random
-
+import pickle
 # Third-party libraries
 import numpy as np
 import MtoNCoupling as mn
