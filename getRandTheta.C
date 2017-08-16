@@ -150,8 +150,10 @@ float getSignalForD (float xs, float ys, int detector)
     sub2 = pow(r,gamma);
     //printf("Sub3 (%.2f^%.2f): %f\n",r,gamma,sub2);
     //Equation for signals computing
-    S = A*(exp(-r/lam))*(abs(sub1))/sub2;
+    S = A*(exp(-r/lam))*(absF(sub1))/sub2;
   }
+
+
   return S;
 }
 
@@ -224,6 +226,10 @@ int main ()
       {
         printf(" %f\t",sig[d]);
         sig[d]=sig[d]/maxS;
+
+	if (sig[d]<=0.2)
+		sig[d]=0;
+
         printf("%f\n",sig[d]);
         fprintf(relSignalsFile,"%f",sig[d]);
         if(d!=15)
